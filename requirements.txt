@@ -1,0 +1,28 @@
+# Core
+pandas
+numpy
+scikit-learn
+
+# NLP / ML
+torch
+transformers
+datasets
+sentencepiece
+evaluate
+
+# Text processing
+nltk
+spacy
+
+# Visualization
+matplotlib
+seaborn
+plotly
+
+# Utils
+tqdm
+pyyaml
+loguru
+supabase
+python-dotenv
+google-genai
