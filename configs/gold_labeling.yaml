@@ -1,0 +1,39 @@
+input_rules_path: "datasets/processed/rules_alaska_100k.jsonl"
+output_pack_path: "datasets/annotation/alaska_100k_for_human_labelling.jsonl"
+
+random_seed: 16
+
+sample_sizes:
+  ads: 150
+  spam: 150
+  irrelevant: 100
+  rant_no_visit: 50
+  none: 50
+
+fallback_if_no_strong: true
+
+stratify:
+  by_rating: true
+  rating_values: [1,2,3,4,5]
+  by_length_bucket: true
+  length_values: ["short","medium","long"]
+  min_recent_frac: 0.30        # at least this fraction ≤ 730 days old
+
+dedupe:
+  drop_exact_text_within_place: true  # drop duplicates on (gmap_id, text) before sampling
+
+id:
+  id_name: "review_id"
+  id_column: ""               # if "", will hash fields below
+  id_hash_fields: ["gmap_id","user_id","time","text"]
+
+export_fields: ["review_id","gmap_id","user_id","rating","time","text","category"]
+
+# ingest settings (used in --mode ingest)
+labels_input_path: "datasets/annotation/gold_labels_v1.jsonl"
+output_merged_path: "datasets/processed/gold_merged_v1.jsonl"
+
+label_schema:
+  bool_labels: ["ads_promo","spam_low_quality","irrelevant","rant_no_visit"]
+  score_labels: ["relevancy_score","visit_likelihood"]
+  annotator_id_col: "annotator_id"

@@ -3,7 +3,7 @@ output_path: "datasets/processed/rules_alaska_100k.jsonl"
 
 # thresholds for "strong" flags (score ∈ [0,1])
 thresholds:
-  ads: 0.6
+  ads: 0.4
   spam: 0.6
   irrelevant: 0.5
   rant_no_visit: 0.5
