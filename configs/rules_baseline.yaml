@@ -1,0 +1,16 @@
+input_path: "datasets/processed/features_alaska_100k.jsonl"
+output_path: "datasets/processed/rules_alaska_100k.jsonl"
+
+# thresholds for "strong" flags (score ∈ [0,1])
+thresholds:
+  ads: 0.6
+  spam: 0.6
+  irrelevant: 0.5
+  rant_no_visit: 0.5
+
+# per-signal cutoffs used inside rule scores
+signals:
+  emoji_count_min: 3
+  punct_runs_min: 1
+  elong_runs_min: 1
+  duplicate_text_min: 2  # text_dup_count_place >= 2 counts as spam signal
