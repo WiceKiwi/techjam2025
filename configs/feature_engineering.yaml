@@ -1,0 +1,25 @@
+input_path: "datasets/processed/sampled_alaska_100k.jsonl"
+output_path: "datasets/processed/features_alaska_100k.jsonl"
+
+enable_groups:
+  text_form: true
+  ad_promo: true
+  nonvisit: true
+  relevancy: true
+  media_resp: true
+  temporal_rating: true
+  aggregates: true
+  language: true
+
+length:
+  short_tokens_max: 8
+  long_chars_min: 200
+
+unicode:
+  nonlatin_ratio_flag: 0.25
+
+lexicons:
+  promo: ["promo","discount","code","deal","sale","free","offer","dm","whatsapp"]
+  contact: ["call","text","email","whatsapp","dm","pm"]
+  nonvisit: ["never been","i heard","i was told","someone said","people say","won't go","would not go"]
+  offtopic: ["iphone","android","laptop","gpu","ram","graphics card","airpods"]
