@@ -85,9 +85,6 @@ class DataCollectionPipeline:
 
         if not review_paths:
             raise FileNotFoundError("no review-* files matched in cfg.sources")
-        if not meta_paths:
-            self._log("no meta-* files found; continuing without meta")
-            meta_paths = []
 
         def read_any(p):
             if p.endswith(".json.gz") or p.endswith(".jsonl.gz"): return pd.read_json(p, compression="gzip", lines=True)
@@ -98,14 +95,26 @@ class DataCollectionPipeline:
 
         dfs_r = [read_any(p) for p in review_paths]
         df_reviews = pd.concat(dfs_r, ignore_index=True)
-        self._log(f"loaded_reviews_rows={len(df_reviews)} files={len(review_paths)}")
 
+        # --- filter to reviews with non-null/non-empty text ---
+        if "text" not in df_reviews.columns:
+            raise ValueError("reviews missing required column 'text'")
+        before = len(df_reviews)
+        s = df_reviews["text"]
+        s_str = s.astype(str)
+        mask_text = s.notna() & s_str.str.strip().ne("") & s_str.str.lower().ne("none")
+        df_reviews = df_reviews.loc[mask_text]
+        dropped = before - len(df_reviews)
+        self._log(f"loaded_reviews_rows={before} after_text_filter={len(df_reviews)} dropped={dropped}")
+
+        # meta load (unchanged)
         if meta_paths:
             dfs_m = [read_any(p) for p in meta_paths]
             df_meta = pd.concat(dfs_m, ignore_index=True)
             self._log(f"loaded_meta_rows={len(df_meta)} files={len(meta_paths)}")
         else:
             df_meta = pd.DataFrame()
+            self._log("no meta-* files found; continuing without meta")
 
         return df_reviews, df_meta
 
