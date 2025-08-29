@@ -1,0 +1,28 @@
+target_n: 100000
+random_seed: 16
+
+sources:
+  - "datasets/raw/review-Alaska_*.json.gz"
+  - "datasets/raw/meta-Alaska.json.gz"
+
+out_dir: "datasets/processed"
+export_basename: "sampled_alaska_100k"
+export_formats: ["jsonl"]
+
+caps:
+  max_per_place: 50
+  max_per_user: 10
+
+floors:
+  with_pics: 0.0
+  with_resp: 0.0
+  recent: 0.30
+
+popularity_targets:
+  tail: 0.25
+  mid: 0.50
+  head: 0.25
+
+meta:
+  join_on: "gmap_id"
+  keep_cols: []
