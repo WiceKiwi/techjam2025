@@ -195,7 +195,6 @@ with st.sidebar:
 try:
     bundles, model_paths = load_all_models(models_dir)
     thresholds = load_thresholds(thresholds_path)
-    # Does any bundle include a featurizer?
     HAS_FEATURIZER = any(isinstance(bundles[t], dict) and "featurizer" in bundles[t] for t in ALL_TARGETS)
 except Exception as e:
     st.error(f"Failed to load models/thresholds: {e}")
@@ -233,14 +232,14 @@ with left:
     st.subheader("Browse reviews ↔ or paste one")
 
     # Manual input mode (enabled only if featurizer exists)
-    manual = st.toggle("Single review (manual input)", value=False)
+    manual = st.toggle("Single review (manual input) [WORK IN PROGRESS]", value=False)
     if manual and not HAS_FEATURIZER:
         st.info("Manual text scoring requires a saved featurizer in the model bundle. "
                 "The loaded models were trained on numeric features only. "
                 "Use the dataset browser, or load models that include a featurizer.")
         manual = False
 
-    TEXT_COL = "text"  # always use 'text' as the text column (no dropdown)
+    TEXT_COL = "text"  # force text column name
 
     if manual:
         user_text = st.text_area("Paste a review", height=160, placeholder="Type or paste a review here…")
@@ -248,25 +247,68 @@ with left:
         st.caption("This mode scores raw text with the saved featurizer; there is no ground truth.")
         sub = None  # not used
     else:
-        q = st.text_input("Search (substring)")
+        # ---- Exact, case-sensitive substring search with robust error handling ----
+        q = st.text_input("Search (EXACT substring; case-sensitive, punctuation literal)")
         sub = df
         if TEXT_COL not in df.columns:
             st.error(f"Expected '{TEXT_COL}' column in dataset but it was not found.")
             st.stop()
-        if q:
+
+        if q is not None and len(q) > 0:
             try:
-                sub = df[df[TEXT_COL].astype(str).str.contains(q, case=False, na=False)]
-            except Exception:
+                ser = df[TEXT_COL].astype(str)          # ensure string
+                mask = ser.str.contains(q, regex=False, na=False)  # exact, literal, case-sensitive
+                if mask.sum() == 0:
+                    st.warning("No rows matched your exact substring. Showing all rows.")
+                    sub = df
+                else:
+                    sub = df.loc[mask]
+            except Exception as e:
+                st.warning(f"Search failed ({e}). Showing all rows.")
                 sub = df
 
+        # NEW: filter to only predicted HOLD rows
+        filter_hold = st.toggle("Show only rows predicted as POLICY HOLD", value=False,
+                                help="Runs the model on the filtered rows and keeps only those with Policy Hold = HOLD.")
+        if filter_hold:
+            try:
+                with st.spinner("Scoring rows to find HOLDs…"):
+                    holds_mask = []
+                    # iterate once over the current 'sub'
+                    for _, rr in sub.iterrows():
+                        sc, ok = {}, True
+                        for t in ALL_TARGETS:
+                            try:
+                                sc[t] = predict_target(bundles[t], rr, text_col=TEXT_COL)
+                            except Exception:
+                                ok = False
+                                break
+                        if not ok:
+                            holds_mask.append(False)
+                            continue
+                        dec = compute_policy(sc, thresholds)
+                        holds_mask.append(dec["policy_hold"] == 1)
+                    holds_mask = np.array(holds_mask, dtype=bool)
+                    sub = sub.loc[holds_mask]
+            except Exception as e:
+                st.warning(f"Unable to apply HOLD filter ({e}). Showing unfiltered results.")
+
         st.caption(f"Showing {len(sub)} / {len(df)} rows")
+
+        if sub.empty:
+            st.warning("No rows after filters. Clear the search/filters to see data again.")
+            st.stop()
 
         # Avoid duplicate preview columns if TEXT_COL == id_key
         cols_to_show = [id_key] + ([] if TEXT_COL == id_key else [TEXT_COL])
         st.dataframe(sub.loc[:, cols_to_show].head(200), height=320, width="stretch")
 
-        selected_id = st.selectbox("Pick an ID", options=sub[id_key].head(200).tolist())
-        row = sub[sub[id_key] == selected_id].iloc[0]
+        try:
+            selected_id = st.selectbox("Pick an ID", options=sub[id_key].head(200).tolist())
+            row = sub[sub[id_key] == selected_id].iloc[0]
+        except Exception:
+            st.error("Could not select row from the filtered dataset. Resetting to the first row.")
+            row = df.iloc[0]
 
 with right:
     st.subheader("Prediction")
@@ -320,14 +362,14 @@ with st.expander("Dataset-level summary (quick)"):
     preview_n = min(500, len(df))
     policy_holds = 0
     rel_counts = {"relevant": 0, "irrelevant": 0}
-    if TEXT_COL not in df.columns:
+    if "text" not in df.columns:
         st.write("No text column in dataset; summary skipped.")
     else:
         for _, r in df.head(preview_n).iterrows():
             sc, ok = {}, True
             for t in ALL_TARGETS:
                 try:
-                    sc[t] = predict_target(bundles[t], r, text_col=TEXT_COL)
+                    sc[t] = predict_target(bundles[t], r, text_col="text")
                 except Exception:
                     ok = False
                     break
