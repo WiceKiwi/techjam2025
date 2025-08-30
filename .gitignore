@@ -210,3 +210,4 @@ datasets/
 .vscode
 _local*
 debug/
+artifacts/
