@@ -197,15 +197,6 @@ class GoldLabelingPipeline:
         id_name = self.cfg["id"]["id_name"]
         fields = [c for c in self.cfg["export_fields"] if c in df.columns or c==id_name]
         pack = df.loc[chosen, fields].copy()
-        # keep helpful bucket hint for audit (not shown to annotators if you prefer)
-        pack["proposed_bucket"] = [
-            "ads" if df.loc[i,"rule_ads_strong"] else
-            "spam" if df.loc[i,"rule_spam_strong"] else
-            "irrelevant" if df.loc[i,"rule_irrelevant_strong"] else
-            "rant_no_visit" if df.loc[i,"rule_rant_strong"] else
-            "none"
-            for i in pack.index
-        ]
         self._write_jsonl(pack,self.cfg["output_pack_path"])
         self._log(f"exported_pack_rows={len(pack)} -> {self.cfg['output_pack_path']}")
         return pack
