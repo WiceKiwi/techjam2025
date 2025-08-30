@@ -14,35 +14,37 @@ We leverage **rule-based heuristics**, **silver labeling with LLMs**, and **trad
 - Adds metadata features (length, emojis, rating deviation, etc.).
 - Ensures `review_id` is generated consistently.
 
-### 2. RuleBasedPipeline
+### 2. FeatureEngineeringPipeline
 - Applies handcrafted rules (regex, heuristics) to flag spam, ads, irrelevant, and rant reviews.
+
+### 3. RuleBasedPipeline
 - Produces rule scores and binary strong indicators.
 
-### 3. SilverLabelingPipeline
+### 4. SilverLabelingPipeline
 - Uses an LLM (Gemma-3-12B-it or similar) to produce "silver" probabilistic labels for each review.
 - Extracts structured JSON scores for downstream training.
 
-### 4. GoldLabelingPipeline
+### 5. GoldLabelingPipeline
 - (Optional, when human annotations are available)
 - Stratified sampling of reviews for annotation.
 - Merges human-provided gold labels back into dataset.
 
-### 5. DatasetSplitPipeline
+### 6. DatasetSplitPipeline
 - Cleans dataset, applies hygiene filters.
 - Stratified split into **train / validation / test** with class balance guarantees.
 - Outputs per-split JSONL and fold CSV for CV.
 
-### 6. ModelTrainingPipeline
+### 7. ModelTrainingPipeline
 - Trains **LightGBM models** for classification (ads_promo, spam_low_quality, irrelevant, rant_no_visit)  
   and regression (relevancy_score, visit_likelihood).
 - Saves models, tuned thresholds, and validation/test predictions.
 
-### 7. EvaluationPipeline
+### 8. EvaluationPipeline
 - Evaluates predictions on val/test splits.
 - Computes metrics (precision, recall, F1, ROC-AUC, PR-AUC, calibration, etc.).
 - Generates plots and Markdown summary reports.
 
-### 8. PolicyEnforcementPipeline
+### 9. PolicyEnforcementPipeline
 - Combines model outputs into final **policy flags**.
 - Flags reviews as ads, spam, irrelevant, rant, or genuine.
 - Produces final dataset for decision-making.
@@ -54,6 +56,7 @@ We leverage **rule-based heuristics**, **silver labeling with LLMs**, and **trad
 | Pipeline                  | Script Command Example |
 |---------------------------|-------------------------|
 | Data Collection           | `python -m scripts.run_data_collection --config configs/data_collection.yaml` |
+| Feature Engineering           | `python -m scripts.run_feature_engineering --config configs/feature_engineering.yaml` |
 | Rule-based Scoring        | `python -m scripts.run_rule_based --config configs/rule_based.yaml` |
 | Silver Labeling           | `python -m scripts.run_silver_labeling --config configs/silver_labeling.yaml` |
 | Gold Labeling (optional)  | `python -m scripts.run_gold_labeling --config configs/gold_labeling.yaml` |
