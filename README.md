@@ -21,6 +21,8 @@ datasets/<thedataset> # json.gz
 datasets/<meta> #json.gz
 ```
 
+We will use both the metadata for Alaska and the Alaska review subset.
+
 ## Pipelines
 
 ### 1. DataCollectionPipeline
