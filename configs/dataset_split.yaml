@@ -1,0 +1,49 @@
+input_path: "datasets/annotation/silver_alaska_10_with_ids.jsonl"
+
+id_key: "review_id"
+text_col: "text"
+group_key: "gmap_id"
+time_col: "time"             # epoch ms or s; only used if time_holdout.percent>0
+
+# Silver probability columns to supervise/evaluate
+label_cols: ["ads_promo","spam_low_quality","irrelevant","rant_no_visit"]
+
+# For stratification only (derive binary labels by quantile so each split has positives)
+stratify:
+  prevalence_pct:
+    ads_promo: 5
+    spam_low_quality: 5
+    irrelevant: 5
+    rant_no_visit: 3
+  min_per_split:
+    val: 5
+    test: 5
+  min_total:              # ensure we have at least this many positives corpus-wide
+    ads_promo: 40
+    spam_low_quality: 40
+    irrelevant: 40
+    rant_no_visit: 15
+  use_rule_proxy: true    # OR with rule flags if available
+  topk_on_sparse: 30      # if still short: mark top-K (per label) as positive
+
+  compute_genuine: true   # keep as a monitoring signal (not enforced)
+
+
+sample_weight:
+  mode: "1-entropy"          # "1-entropy" | "max-violation" | "uniform"
+
+time_holdout:
+  percent: 0                 # e.g., 10 to hold out newest 10% groups as test
+  seed: 16
+
+split:
+  ratios: {train: 0.7, val: 0.15, test: 0.15}
+  seed: 16
+
+outputs:
+  dir: "datasets/splits"
+  train_name: "train.jsonl"
+  val_name: "val.jsonl"
+  test_name: "test.jsonl"
+  folds_csv: "folds.csv"
+  thresholds_json: "stratify_thresholds.json"
