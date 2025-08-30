@@ -14,7 +14,13 @@ conda activate ratu
 pip install -r requirements.txt
 ```
 
-### 
+### Input Data
+Due to time constraints, we will be using a smaller dataset limited to the Alaska region, available at https://mcauleylab.ucsd.edu/public_datasets/gdrive/googlelocal. At the root of the project directory, create the folder:
+```
+datasets/<thedataset> # json.gz
+datasets/<meta> #json.gz
+```
+
 ## Pipelines
 
 ### 1. DataCollectionPipeline
