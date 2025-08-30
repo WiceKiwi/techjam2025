@@ -17,8 +17,8 @@ features:
   exclude: ["review_id", "gmap_id", "user_id", "text"]
 
 thresholding:
-  strategy: "auto_f1"        # or "fixed"
-  fixed: {}                  # e.g., {"ads_promo": 0.6, ...}
+  strategy: "fixed"        # or "fixed"
+  fixed: {"ads_promo": 0.6, "spam_low_quality": 0.6, "irrelevant": 0.9, "rant_no_visit": 0.6}                  # e.g., {"ads_promo": 0.6, ...}
 
 model:
   type: "lgbm"
