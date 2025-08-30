@@ -1,9 +1,9 @@
 paths:
-  silver_sample: "datasets/annotation/silver_alaska_10_with_ids.jsonl"
-  train: "datasets/splits/train.jsonl"
+  silver_sample: "datasets/annotation/silver_alaska_10_with_ids.jsonl"  # replace with your sample path
+  train: "datasets/splits/train.jsonl"                                  # replace if your split paths differ
   val:   "datasets/splits/val.jsonl"
   test:  "datasets/splits/test.jsonl"
-  eval_summary: "artifacts/eval/summary.csv"
+  eval_summary: "artifacts/eval/summary.csv"                            # replace if stored elsewhere
   policy_counts: "artifacts/policy/counts.csv"
   policy_decisions: "artifacts/policy/decisions.jsonl"
 

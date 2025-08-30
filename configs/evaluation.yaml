@@ -1,11 +1,11 @@
 data:
-  test_path: "datasets/splits/test.jsonl"
-  val_path: "datasets/splits/val.jsonl"     # (will be skipped if missing)
+  test_path: "datasets/splits/test.jsonl"            # replace if your splits live elsewhere
+  val_path: "datasets/splits/val.jsonl"              # replace if your splits live elsewhere
 
 artifacts:
-  preds_test: "artifacts/preds/test_preds.jsonl"
-  preds_val:  "artifacts/preds/val_preds.jsonl"
-  thresholds_json: "artifacts/models/thresholds.json"  # written by training
+  preds_test: "artifacts/preds/test_preds.jsonl"      # replace with your prediction file path
+  preds_val:  "artifacts/preds/val_preds.jsonl"       # replace with your prediction file path
+  thresholds_json: "artifacts/models/thresholds.json" # written by training; replace if you stored thresholds elsewhere
 
 schema:
   id_key: "review_id"
@@ -22,8 +22,8 @@ plots:
   dpi: 120
 
 output:
-  dir: "artifacts/eval"
-  plots_dir: "artifacts/plots"
+  dir: "artifacts/eval"                                # choose your output directory
+  plots_dir: "artifacts/plots"                         # choose where plots should go
   summary_json: "artifacts/eval/summary.json"
   summary_csv:  "artifacts/eval/summary.csv"
   report_md:    "artifacts/eval/report.md"

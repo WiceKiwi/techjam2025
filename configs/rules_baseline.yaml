@@ -1,5 +1,5 @@
-input_path: "datasets/processed/features_alaska_100k.jsonl"
-output_path: "datasets/processed/rules_alaska_100k.jsonl"
+input_path: "datasets/processed/features_alaska_100k.jsonl"   # replace with your features file path
+output_path: "datasets/processed/rules_alaska_100k.jsonl"     # choose your rules output path
 
 # thresholds for "strong" flags (score ∈ [0,1])
 thresholds:

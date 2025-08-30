@@ -1,5 +1,5 @@
-input_path: "datasets/processed/sampled_alaska_100k.jsonl"
-output_path: "datasets/processed/features_alaska_100k.jsonl"
+input_path: "datasets/processed/sampled_alaska_100k.jsonl"  # replace with your processed sample path
+output_path: "datasets/processed/features_alaska_100k.jsonl"  # choose your output features path
 
 enable_groups:
   text_form: true

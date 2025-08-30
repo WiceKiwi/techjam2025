@@ -1,7 +1,7 @@
 data:
-  train_path: "datasets/splits/train.jsonl"
-  val_path:   "datasets/splits/val.jsonl"
-  test_path:  "datasets/splits/test.jsonl"
+  train_path: "datasets/splits/train.jsonl"      # replace with your train split path
+  val_path:   "datasets/splits/val.jsonl"        # replace with your val split path
+  test_path:  "datasets/splits/test.jsonl"       # replace with your test split path
 
 schema:
   id_key: "review_id"
@@ -57,8 +57,8 @@ train:
   early_stopping_rounds: 50  # uses val set
 
 output:
-  dir: "artifacts/models"
-  metrics_json: "artifacts/models/metrics.json"
-  thresholds_json: "artifacts/models/thresholds.json"
-  preds_val: "artifacts/preds/val_preds.jsonl"
-  preds_test: "artifacts/preds/test_preds.jsonl"
+  dir: "artifacts/models"                        # choose your models output dir
+  metrics_json: "artifacts/models/metrics.json"  # where to write metrics
+  thresholds_json: "artifacts/models/thresholds.json"  # written by training; replace if stored elsewhere
+  preds_val: "artifacts/preds/val_preds.jsonl"   # where to write validation preds
+  preds_test: "artifacts/preds/test_preds.jsonl" # where to write test preds

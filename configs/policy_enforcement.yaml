@@ -2,10 +2,10 @@
 data:
   split: test
   base_paths:
-    val:  "datasets/splits/val.jsonl"
+    val:  "datasets/splits/val.jsonl"              # replace with your split paths if different
     test: "datasets/splits/test.jsonl"
   preds_paths:
-    val:  "artifacts/preds/val_preds.jsonl"
+    val:  "artifacts/preds/val_preds.jsonl"        # replace with your prediction file paths
     test: "artifacts/preds/test_preds.jsonl"
 
 schema:
@@ -36,7 +36,7 @@ genuine:
   review_min: 0.65          # else >= this ⇒ final="review"; otherwise "not_genuine"
 
 output:
-  path:        "artifacts/policy/decisions.jsonl"
+  path:        "artifacts/policy/decisions.jsonl"  # choose your output directory/filenames
   counts_csv:  "artifacts/policy/counts.csv"      # counts by action/final
   reasons_csv: "artifacts/policy/reasons.csv"     # exploded reasons for analysis
   dir:         "artifacts/policy"                 # created if missing

@@ -1,5 +1,5 @@
-input_path: "datasets/processed/rules_alaska_100k.jsonl"
-output_path: "datasets/processed/silver_alaska_10.jsonl"
+input_path: "datasets/processed/rules_alaska_100k.jsonl"     # replace with your rules file path
+output_path: "datasets/processed/silver_alaska_10.jsonl"     # choose your silver labels output path
 sample_size: 2000
 random_seed: 16
 

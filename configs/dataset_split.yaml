@@ -1,4 +1,4 @@
-input_path: "datasets/annotation/silver_alaska_10_with_ids.jsonl"
+input_path: "datasets/annotation/silver_alaska_10_with_ids.jsonl"  # replace with your silver labels path
 
 id_key: "review_id"
 text_col: "text"
@@ -41,8 +41,8 @@ split:
   seed: 16
 
 outputs:
-  dir: "datasets/splits"
-  train_name: "train.jsonl"
+  dir: "datasets/splits"                 # choose your desired output directory
+  train_name: "train.jsonl"              # you can rename these split files
   val_name: "val.jsonl"
   test_name: "test.jsonl"
   folds_csv: "folds.csv"

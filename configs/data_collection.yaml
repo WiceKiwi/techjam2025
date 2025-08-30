@@ -2,11 +2,11 @@ target_n: 100000
 random_seed: 16
 
 sources:
-  - "datasets/raw/review-Alaska_*.json.gz"
-  - "datasets/raw/meta-Alaska.json.gz"
+  - "datasets/raw/review-Alaska_*.json.gz"  # replace with your review dumps path/glob
+  - "datasets/raw/meta-Alaska.json.gz"       # replace with your metadata file path
 
-out_dir: "datasets/processed"
-export_basename: "sampled_alaska_100k"
+out_dir: "datasets/processed"                # change if you prefer a different output dir
+export_basename: "sampled_alaska_100k"       # change to your preferred basename
 export_formats: ["jsonl"]
 
 caps:
