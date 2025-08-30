@@ -68,7 +68,7 @@ We leverage **rule-based heuristics**, **silver labeling with LLMs**, and **trad
 ---
 
 ## Demo Script
-For a **2-minute demo**, run:
+run:
 
 ```bash
 python -m scripts.demo
