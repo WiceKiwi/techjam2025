@@ -1,0 +1,51 @@
+input_path: "datasets/processed/rules_alaska_100k.jsonl"
+output_path: "datasets/processed/silver_alaska_10.jsonl"
+sample_size: 2000
+random_seed: 16
+
+fields:
+  id_key: "review_id"
+  text: "text"
+  rating: "rating"
+  place_name: "name"
+
+model:
+  provider: "huggingface"
+  name: "google/gemma-3-1b-it"   # 1B fits on CPU; 4B if you have RAM/GPU
+  backend: "transformers"
+  api_task: "text-generation"    # we’ll send a single string prompt
+  device: "cuda"                 # auto | cpu | cuda | mps
+  dtype: "auto"                  # auto | float16 | float32
+  trust_remote_code: false
+  revision: null
+  max_new_tokens: 200            # match your notebook
+  temperature: 0.0               # deterministic for labeling
+  top_p: 0.9
+  retries: 0                     # local, so no retries needed
+  timeout_s: 60
+
+
+prompt:
+  system_path: "prompts/silver_label_prompt.txt"
+  few_shot_path: "prompts/silver_fewshot.jsonl"   # supports .jsonl/.json; if .txt, it’s inlined as-is
+
+fusion:
+  enabled: false            # set true to enable rules priors
+  rules_path: "datasets/processed/rules_alaska_100k.jsonl"
+  mode: "prior_max"         # "prior_max" or "blend"
+  blend_alpha: 0.7          # only for mode="blend"
+  priors:
+    ads_promo: 0.90
+    spam_low_quality: 0.85
+    irrelevant: 0.80
+    rant_no_visit: 0.80
+
+runtime:
+  use_tqdm: true
+  json_guard: true
+  debug_dump:
+    enabled: false
+    dir: "debug/silver"
+    max_items: 10
+    include_prompts: true
+

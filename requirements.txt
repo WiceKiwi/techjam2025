@@ -26,3 +26,5 @@ loguru
 supabase
 python-dotenv
 google-genai
+chardet
+hf_xet

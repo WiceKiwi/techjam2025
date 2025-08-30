@@ -1,0 +1,4 @@
+{"input":{"text":"Best service! Call us at (907) 555-1212 for catering. 10% off this week!","rating":5,"place_name":"Glacier Grill"},"output":{"ads_promo":0.95,"irrelevant":0.05,"rant_no_visit":0.05,"spam_low_quality":0.20,"relevancy_score":0.70,"visit_likelihood":0.30}}
+{"input":{"text":"Never been here but my friend said it's terrible.","rating":1,"place_name":"Aurora Coffee"},"output":{"ads_promo":0.05,"irrelevant":0.10,"rant_no_visit":0.95,"spam_low_quality":0.30,"relevancy_score":0.20,"visit_likelihood":0.05}}
+{"input":{"text":"Clam chowder was hot and creamy, sourdough fresh. Busy at 6pm but staff kept tables moving.","rating":5,"place_name":"Harbor House"},"output":{"ads_promo":0.02,"irrelevant":0.02,"rant_no_visit":0.05,"spam_low_quality":0.05,"relevancy_score":0.95,"visit_likelihood":0.90}}
+
