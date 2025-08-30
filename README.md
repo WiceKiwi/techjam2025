@@ -6,7 +6,15 @@ The system detects spam, ads, irrelevant reviews, and rants, while also scoring 
 We leverage **rule-based heuristics**, **silver labeling with LLMs**, and **traditional ML training** to produce reliable classifiers for policy enforcement.
 
 ---
+## Prerequisites
+### Setup Environment
+```bash
+conda create --name ratu python=3.12
+conda activate ratu
+pip install -r requirements.txt
+```
 
+### 
 ## Pipelines
 
 ### 1. DataCollectionPipeline
