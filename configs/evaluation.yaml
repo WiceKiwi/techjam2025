@@ -1,0 +1,33 @@
+data:
+  test_path: "datasets/splits/test.jsonl"
+  val_path: "datasets/splits/val.jsonl"     # (will be skipped if missing)
+
+artifacts:
+  preds_test: "artifacts/preds/test_preds.jsonl"
+  preds_val:  "artifacts/preds/val_preds.jsonl"
+  thresholds_json: "artifacts/models/thresholds.json"  # written by training
+
+schema:
+  id_key: "review_id"
+
+targets: ["ads_promo", "spam_low_quality", "irrelevant", "rant_no_visit"]
+
+binarization:
+  use_tuned_thresholds: true   # read per-target thresholds from thresholds_json
+
+plots:
+  roc_pr: true
+  hist: true
+  calibration: false
+  dpi: 120
+
+output:
+  dir: "artifacts/eval"
+  plots_dir: "artifacts/plots"
+  summary_json: "artifacts/eval/summary.json"
+  summary_csv:  "artifacts/eval/summary.csv"
+  report_md:    "artifacts/eval/report.md"
+
+logging:
+  ignore_warnings: true
+  note_on_single_class: true

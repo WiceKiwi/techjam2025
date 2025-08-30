@@ -1,4 +1,3 @@
-# ==== DATA ====
 data:
   train_path: "datasets/splits/train.jsonl"
   val_path:   "datasets/splits/val.jsonl"
@@ -8,61 +7,58 @@ schema:
   id_key: "review_id"
   group_key: "gmap_id"
 
-# Which targets to train (continuous). Keep these as silver scores in [0,1]
+# Split targets by task
 targets:
-  - ads_promo
-  - spam_low_quality
-  - irrelevant
-  - rant_no_visit
-  - relevancy_score
-  - visit_likelihood
+  binary: ["ads_promo", "spam_low_quality", "irrelevant", "rant_no_visit"]
+  regression: ["relevancy_score", "visit_likelihood"]
 
-# Feature selection
 features:
-  mode: "auto_numeric"        # "auto_numeric" or "explicit"
-  include: []                 # when mode="explicit", list features here
-  exclude:
-    - review_id
-    - gmap_id
-    - user_id
-    - time
-    - text
-    - pics
-    - resp
-    - name
-    - category
+  mode: "auto_numeric"       # or "explicit" + include: [...]
+  exclude: ["review_id", "gmap_id", "user_id", "text"]
 
-# Thresholding for binary metrics
 thresholding:
-  strategy: "auto_f1"         # "auto_f1" | "fixed"
-  fixed:
-    ads_promo: 0.50
-    spam_low_quality: 0.50
-    irrelevant: 0.50
-    rant_no_visit: 0.50
-    relevancy_score: 0.50
-    visit_likelihood: 0.50
+  strategy: "auto_f1"        # or "fixed"
+  fixed: {}                  # e.g., {"ads_promo": 0.6, ...}
 
-# Model config (scikit-learn HistGradientBoostingRegressor)
 model:
-  type: "hgb"                 # only "hgb" supported in this quick pipeline
-  params:
-    learning_rate: 0.08
-    max_depth: 6
-    max_bins: 255
-    l2_regularization: 0.0
-    early_stopping: "auto"
-    random_state: 16
+  type: "lgbm"
+  binary:
+    class_weight: "balanced" # helps rare classes
+    params:
+      num_leaves: 31
+      max_depth: -1
+      learning_rate: 0.05
+      n_estimators: 800
+      subsample: 0.9
+      colsample_bytree: 0.9
+      min_child_samples: 20
+      reg_alpha: 0.0
+      reg_lambda: 0.0
+      random_state: 16
+  regression:
+    params:
+      num_leaves: 31
+      max_depth: -1
+      learning_rate: 0.05
+      n_estimators: 800
+      subsample: 0.9
+      colsample_bytree: 0.9
+      min_child_samples: 20
+      reg_alpha: 0.0
+      reg_lambda: 0.0
+      random_state: 16
+  calibration:
+    enabled: true
+    method: "isotonic" # "isotonic" (best) or "sigmoid"
+    cv: "prefit" # prefit on val
 
 train:
-  n_jobs: 0                   # hgb is single-threaded internally; leave 0
-  drop_na_targets: true       # drop rows with NaN in target
-  seed: 16
+  drop_na_targets: true
+  early_stopping_rounds: 50  # uses val set
 
-# Outputs
 output:
-  dir: "artifacts/models"     # models + metrics + thresholds
+  dir: "artifacts/models"
+  metrics_json: "artifacts/models/metrics.json"
+  thresholds_json: "artifacts/models/thresholds.json"
   preds_val: "artifacts/preds/val_preds.jsonl"
   preds_test: "artifacts/preds/test_preds.jsonl"
-  metrics_json: "artifacts/metrics/metrics.json"
-  thresholds_json: "artifacts/metrics/thresholds.json"

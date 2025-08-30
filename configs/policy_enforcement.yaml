@@ -1,0 +1,46 @@
+# Which data/preds to evaluate. Use split: test|val or "file" for custom paths.
+data:
+  split: test
+  base_paths:
+    val:  "datasets/splits/val.jsonl"
+    test: "datasets/splits/test.jsonl"
+  preds_paths:
+    val:  "artifacts/preds/val_preds.jsonl"
+    test: "artifacts/preds/test_preds.jsonl"
+
+schema:
+  id_key: review_id
+
+carry_columns:
+  - gmap_id
+  - user_id
+  - time
+  - rating
+  - text
+
+# Decision thresholds (operate on PREDICTED scores: pred_<target>)
+thresholds:
+  labels:
+    spam_low_quality: { auto: 0.95, review: 0.80 }
+    ads_promo:        { auto: 0.95, review: 0.80 }
+    irrelevant:       { auto: 0.95, review: 0.80 }
+    rant_no_visit:    { auto: 0.95, review: 0.80 }
+  continuous:
+    visit_likelihood: { auto_max: 0.15, review_max: 0.35 }
+    relevancy_score:  { auto_max: 0.15, review_max: 0.35 }
+
+# “Genuine” decision layer
+genuine:
+  score_method: geom_mean   # geom_mean | min
+  auto_min: 0.85            # promote to final="genuine" if >= this AND no bad gates fired
+  review_min: 0.65          # else >= this ⇒ final="review"; otherwise "not_genuine"
+
+output:
+  path:        "artifacts/policy/decisions.jsonl"
+  counts_csv:  "artifacts/policy/counts.csv"      # counts by action/final
+  reasons_csv: "artifacts/policy/reasons.csv"     # exploded reasons for analysis
+  dir:         "artifacts/policy"                 # created if missing
+
+logging:
+  use_tqdm: true
+  silence_warnings: true
