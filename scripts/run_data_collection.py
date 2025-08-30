@@ -2,7 +2,7 @@ from random import sample
 import os, sys, yaml, glob, logging, json
 from pathlib import Path
 import pandas as pd
-from techjam2025.utils.ids import add_review_id
+from src.techjam2025.utils.ids import add_review_id
 
 ROOT = Path(__file__).resolve().parents[1]
 SRC = ROOT / "src"
@@ -40,10 +40,8 @@ def main():
     dc_cfg = DataCollectionConfig.from_dict(cfg_dict)
     pipe = DataCollectionPipeline(dc_cfg, logger=logger)
 
-    # 1) load reviews + meta
     df_reviews, df_meta = pipe._load_sources()
 
-    # 2) merge on gmap_id (or YAML meta.join_on)
     df_merged = DataCollectionPipeline.merge_metadata(
         df_reviews,
         df_meta,
@@ -52,14 +50,9 @@ def main():
         logger=logger
     )
 
-    # 3) sample using YAML-driven knobs
     sample = DataCollectionPipeline.stratified_sample_reviews(df_merged, dc_cfg.sampler_cfg(), logger=logger)
     logger.info(f"sampled_rows={len(sample)}")
 
-    sample = add_review_id(sample, id_col="review_id")
-    logger.info(f"added_review_id rows={len(sample)} uniq_ids={sample['review_id'].nunique()}")
-
-    # 4) export
     if not args.dry_run:
         pipe._export(sample)
         logger.info("export complete")

@@ -57,7 +57,7 @@ We leverage **rule-based heuristics**, **silver labeling with LLMs**, and **trad
 |---------------------------|-------------------------|
 | Data Collection           | `python -m scripts.run_data_collection --config configs/data_collection.yaml` |
 | Feature Engineering           | `python -m scripts.run_feature_engineering --config configs/feature_engineering.yaml` |
-| Rule-based Scoring        | `python -m scripts.run_rule_based --config configs/rule_based.yaml` |
+| Rule-based Scoring        | `python -m scripts.run_rules_baseline --config configs/rules_baseline.yaml` |
 | Silver Labeling           | `python -m scripts.run_silver_labeling --config configs/silver_labeling.yaml` |
 | Gold Labeling (optional)  | `python -m scripts.run_gold_labeling --config configs/gold_labeling.yaml` |
 | Dataset Split             | `python -m scripts.run_dataset_split --config configs/dataset_split.yaml` |
@@ -71,7 +71,7 @@ We leverage **rule-based heuristics**, **silver labeling with LLMs**, and **trad
 run:
 
 ```bash
-python -m scripts.demo
+python -m scripts.demo --config configs/demo.yaml
 ```
 
 The demo will:

@@ -108,8 +108,7 @@ class FeatureEngineeringPipeline:
         short_max = int(self.cfg["length"]["short_tokens_max"])
         long_min = int(self.cfg["length"]["long_chars_min"])
 
-        # keys to retain for joins/troubleshooting
-        keep_cols = [c for c in ["gmap_id","user_id","time","rating","text","pics","resp"] if c in df.columns]
+        keep_cols = [c for c in ["review_id","gmap_id","user_id","time","rating","text","pics","resp"] if c in df.columns]
         out = pd.DataFrame(index=df.index)
         for c in keep_cols:
             out[c] = df[c]

@@ -4,6 +4,7 @@ import glob, json
 from pathlib import Path
 import pandas as pd
 import numpy as np
+from src.techjam2025.utils.ids import add_review_id
 
 @dataclass
 class MetaCfg:
@@ -323,4 +324,7 @@ class DataCollectionPipeline:
         merged = df_reviews.merge(df_meta[[on]+meta_cols], on=on, how="left", copy=False)
         matched = merged[on].notna().sum()
         if logger: logger.info(f"merge_metadata: left={left} matched_on_meta={matched}")
+
+        merged = add_review_id(merged, id_col="review_id")
+        logger.info(f"added_review_id rows={len(merged)} uniq_ids={merged['review_id'].nunique()}")
         return merged

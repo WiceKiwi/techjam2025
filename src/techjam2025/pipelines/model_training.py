@@ -23,8 +23,6 @@ import warnings
 import lightgbm as lgb
 from lightgbm import LGBMClassifier, LGBMRegressor, early_stopping, log_evaluation
 
-lgb.set_config(verbosity=-1)
-
 warnings.filterwarnings(
     "ignore",
     message="The `cv='prefit'` option is deprecated",
