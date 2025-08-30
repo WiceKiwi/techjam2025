@@ -97,3 +97,8 @@ The demo will:
 4. Show evaluation summary and final policy flags.
 
 This demonstrates the end-to-end flow without requiring the full dataset.
+
+For simple UI demonstration of our plicy enforcement, you can run:
+```bash
+streamlit run streamlit_demo.py
+```
