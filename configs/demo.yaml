@@ -1,0 +1,13 @@
+paths:
+  silver_sample: "datasets/annotation/silver_alaska_10_with_ids.jsonl"
+  train: "datasets/splits/train.jsonl"
+  val:   "datasets/splits/val.jsonl"
+  test:  "datasets/splits/test.jsonl"
+  eval_summary: "artifacts/eval/summary.csv"
+  policy_counts: "artifacts/policy/counts.csv"
+  policy_decisions: "artifacts/policy/decisions.jsonl"
+
+display:
+  sample_chars: 140     # how many chars of text to show
+  sample_decisions: 1   # how many policy decisions to print
+  targets: ["ads_promo","spam_low_quality","irrelevant","rant_no_visit","relevancy_score","visit_likelihood"]
