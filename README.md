@@ -23,6 +23,54 @@ datasets/<meta> #json.gz
 
 We will use both the metadata for Alaska and the Alaska review subset.
 
+## Environment variables
+
+Create a `.env` file at the repository root with your credentials/tokens:
+
+```dotenv
+SUPABASE_URL=your_supabase_url
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+SUPABASE_ANON_KEY=your_anon_key
+HF_TOKEN=your_huggingface_token
+```
+
+These are loaded by the scripts at runtime. Ensure the `.env` file is not committed to version control.
+
+## Hugging Face setup (token, login, Gemma access)
+
+1) Create an account and token
+- Sign in at [Hugging Face](https://huggingface.co/)
+- Create a Personal Access Token with at least "read" scope at [Settings → Access Tokens](https://huggingface.co/settings/tokens)
+
+2) Log in via CLI (recommended)
+```bash
+conda activate ratu
+pip install -U "huggingface_hub[cli]"
+huggingface-cli login
+```
+- Windows PowerShell non-interactive option:
+```powershell
+$env:HF_TOKEN="paste-your-token-here"
+huggingface-cli login --token $env:HF_TOKEN
+```
+
+3) Add token to .env (alternative)
+- You can also set `HF_TOKEN` in your `.env` (see section above). On Windows PowerShell for the current session:
+```powershell
+$env:HF_TOKEN="paste-your-token-here"
+```
+
+4) Request access to Gemma
+- Visit the model page and click "Agree and access" / "Request access":
+  - [Gemma 3 1B Instruct](https://huggingface.co/google/gemma-3-1b-it)
+- Access must be granted for your account before running the silver labeling pipeline.
+
+5) Verify setup
+```bash
+huggingface-cli whoami
+python -c "from huggingface_hub import HfApi; print(HfApi().model_info('google/gemma-3-1b-it').id)"
+```
+
 ## Pipelines
 
 ### 1. DataCollectionPipeline
